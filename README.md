@@ -2,7 +2,7 @@
 
 A logical backup utility for MySQL, in its heart leveraging mysqldump program to do its heavy lifting. Shipped with simple backup retention system.
 
-This tool is designed to support cronjob.
+This tool is designed to support cronjob. Need >= Python 3.8
 
 # Prerequisites
 
@@ -65,4 +65,16 @@ Backup policy configuration supports all parameters from `mysqldump` program. Se
 5. `retention_timeout` -- Retention timeout, in seconds (Default: 6 days / 518400 seconds)
 6. `active` -- Backup policy activation flag (set to false to pause policy)
 
+# Cron configuration
 
+The backup retention system rely on cron to run script periodically, each time cronjob.py script is run, it performs backup and expiration routine.
+
+Example Cron configuration
+
+```
+0 1 * * * /usr/bin/python3.9 /home/user/.easy-mysqldump/cronjob.py
+0 7 * * * /usr/bin/python3.9 /home/user/.easy-mysqldump/cronjob.py
+0 13 * * * /usr/bin/python3.9 /home/user/.easy-mysqldump/cronjob.py
+```
+
+To easily determine cron schedule you want to run, use online tool like https://crontab.guru/
