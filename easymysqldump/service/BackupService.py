@@ -12,11 +12,21 @@ from easymysqldump import IllegalExpirationException
 class BackupService:
 
     def __init__(self, target: str, username: str, password: str, hostname: str = 'localhost', port: str = '3306'):
-        self.target = target,
-        self.hostname = hostname,
+        self.target = target
+        self.hostname = hostname
         self.port = port
-        self.username = username,
+        self.username = username
         self.password = password
+
+    @classmethod
+    def from_settings(cls, settings):
+        return cls(
+            target= settings.TARGET,
+            username= settings.MYSQL_USERNAME,
+            password= settings.MYSQL_PASSWORD,
+            hostname= settings.MYSQL_HOSTNAME,
+            port = settings.MYSQL_PORT
+        )
 
     # Backup Service
     @property
@@ -25,7 +35,7 @@ class BackupService:
 
     @staticmethod
     def __run_command(command: str):
-        return subprocess.call(command, shell=True)
+        return subprocess.call(command, shell=True, executable='/bin/bash')
 
     def __gen_target_path(self, filename: str):
         return f"{self.target}/{filename}"

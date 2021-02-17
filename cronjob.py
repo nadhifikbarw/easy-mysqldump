@@ -13,8 +13,7 @@ def main(settings):
     db = MetadataDB(Path(settings.DBPATH))
     logging.info(f"Metadata database connected")
 
-    service = BackupService(settings.TARGET, settings.MYSQL_USERNAME, settings.MYSQL_PASSWORD, settings.MYSQL_HOSTNAME,
-                            settings.MYSQL_PORT)
+    service = BackupService.from_settings(settings)
 
     # Backup Process
     logging.info(f"Begin backup routine")
@@ -96,7 +95,6 @@ if __name__ == '__main__':
     #######################################
     #  Run Backup and Expiration Routine  #
     #######################################
-
     main(AppSettings)
     logging.shutdown()
     sys.exit(0)
