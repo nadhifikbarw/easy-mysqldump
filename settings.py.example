@@ -1,0 +1,7 @@
+DBPATH = './data/metadata.db'
+TARGET = '~/backup'
+
+MYSQL_HOSTNAME = 'localhost'
+MYSQL_PORT = '3306'
+MYSQL_USERNAME = 'username'
+MYSQL_PASSWORD = 'password'
