@@ -1,4 +1,5 @@
 import os
+import subprocess
 from pathlib import Path
 from datetime import datetime
 from easymysqldump.model import BackupLog
@@ -24,7 +25,7 @@ class BackupService:
 
     @staticmethod
     def __run_command(command: str):
-        return os.system(command)
+        return subprocess.call(command, shell=True)
 
     def __gen_target_path(self, filename: str):
         return f"{self.target}/{filename}"
