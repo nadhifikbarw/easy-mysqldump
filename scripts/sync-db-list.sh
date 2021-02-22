@@ -1,5 +1,7 @@
 # #!/bin/bash
 
+EXCEPTIONS="information_schema performance_schema"
+
 # Defaults
 HOSTNAME="localhost"
 USER="root"
@@ -82,7 +84,7 @@ fi
 while getopts ":P:e:u:p:h" opt; do
   case $opt in
     P ) PORT=$OPTARG ;;
-    e ) EXCEPTIONS=$OPTARG ;;
+    e ) EXCEPTIONS="$EXCEPTIONS $OPTARG" ;;
     u ) USER=$OPTARG ;;
     p ) PASSWORD=$OPTARG ;;
     \? ) printHelp ;;
