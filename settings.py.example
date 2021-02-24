@@ -1,5 +1,7 @@
+# Note: Relative path will resolve to the same folder as cronjob.py as root
+
 DBPATH = './data/metadata.db'
-TARGET = '~/backup'
+TARGET = '/home/username/backup'
 
 MYSQL_HOSTNAME = 'localhost'
 MYSQL_PORT = '3306'
