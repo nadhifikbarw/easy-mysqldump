@@ -7,10 +7,12 @@ from pathlib import Path
 from easymysqldump import BackupLog
 from easymysqldump import MetadataDB
 from easymysqldump import BackupService
+from easymysqldump.common import expand_resolve_path
 
 
 def main(settings):
-    db = MetadataDB(Path(settings.DBPATH))
+    db_path = expand_resolve_path(settings.DBPATH)
+    db = MetadataDB(Path(db_path))
     logging.info(f"Metadata database connected")
 
     service = BackupService.from_settings(settings)
@@ -48,32 +50,33 @@ def main(settings):
     db.close()
     logging.info(f"Metadata database disconnected")
 
-
 if __name__ == '__main__':
     #####################################
     #  Prerequisite checking and Setup  #
     #####################################
 
-    # Set working directory
-    abspath = os.path.abspath(__file__)
-    dirname = os.path.dirname(abspath)
-    os.chdir(dirname)
+    # Set working dir to current file dir
+    filepath = expand_resolve_path(__file__)
+    os.chdir(os.path.dirname(filepath))
 
     # Logging
     os.makedirs("./logs", exist_ok=True)
-    logging_time_fmt = '%Y:%m:%d:%H:%M:%S'
+    logging_datefmt = '%Y:%m:%d:%H:%M:%S'
     logging_format = '[%(asctime)s] %(levelname)s %(message)s'
-    logging.basicConfig(filename="logs/app.log", filemode='a+', datefmt=logging_time_fmt, format=logging_format,
+    logging.basicConfig(filename="logs/app.log", filemode='a+', datefmt=logging_datefmt, format=logging_format,
                         level=logging.DEBUG)
 
     # Check settings
-    settings_file = Path("./settings.py")
+    settings_path = expand_resolve_path('./settings.py')
+    settings_file = Path(settings_path)
     if settings_file.is_file():
         import settings as AppSettings
-
         logging.info("AppSettings loaded")
-        os.makedirs(Path(AppSettings.TARGET), exist_ok=True)
-        logging.info(f"Output dir set to: {AppSettings.TARGET}")
+
+        # Create backup folder if not exist
+        target_path = expand_resolve_path(AppSettings.TARGET)
+        os.makedirs(Path(target_path), exist_ok=True)
+        logging.info(f"Output dir set to: {target_path}")
     else:
         msg = "settings.py not found, please run install.sh settings"
         print(msg)
@@ -82,7 +85,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Check metadata.db
-    db_file = Path(AppSettings.DBPATH)
+    db_path = expand_resolve_path(AppSettings.DBPATH)
+    db_file = Path(db_path)
     if db_file.is_file():
         logging.info("Metadata Database found")
     else:

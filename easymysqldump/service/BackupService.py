@@ -7,6 +7,7 @@ from easymysqldump.model import BackupPolicy
 from easymysqldump.model import BackupRequest
 from easymysqldump.model import ExpirationRequest
 from easymysqldump import IllegalExpirationException
+from easymysqldump.common import expand_resolve_path
 
 
 class BackupService:
@@ -21,10 +22,10 @@ class BackupService:
     @classmethod
     def from_settings(cls, settings):
         return cls(
-            target= settings.TARGET,
-            username= settings.MYSQL_USERNAME,
-            password= settings.MYSQL_PASSWORD,
-            hostname= settings.MYSQL_HOSTNAME,
+            target = expand_resolve_path(settings.TARGET),
+            username = settings.MYSQL_USERNAME,
+            password = settings.MYSQL_PASSWORD,
+            hostname = settings.MYSQL_HOSTNAME,
             port = settings.MYSQL_PORT
         )
 
