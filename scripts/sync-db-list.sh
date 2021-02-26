@@ -1,4 +1,4 @@
-# #!/bin/bash
+#!/usr/bin/env bash
 
 EXCEPTIONS="information_schema performance_schema"
 
